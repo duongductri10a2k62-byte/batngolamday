@@ -421,6 +421,81 @@
             btn.style.top = randomY + "px";
         }
 
+        
+
+    // Các hàm chuyển page của bạn
+    function openForm1() {
+        document.getElementById("page1").style.display = "none";
+        document.getElementById("page2").style.display = "flex";
+    }
+
+    function openForm2() {
+        document.getElementById("page2").style.display = "none";
+        document.getElementById("page3").style.display = "flex";
+    }
+
+    // Nút Đi luôn
+    function sayYes() {
+        alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖");
+    }
+
+    // Nút Không thèm đi
+    function moveNoButton() {
+        const btn = document.getElementById("noBtn");
+
+        const maxX = window.innerWidth - btn.offsetWidth;
+        const maxY = window.innerHeight - btn.offsetHeight;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        btn.style.left = randomX + "px";
+        btn.style.top = randomY + "px";
+    }
+
+    // ================= KẾT NỐI BACKEND =================
+
+    async function sendMessage() {
+
+        const name = document.getElementById("name").value;
+        const message = document.getElementById("message").value;
+
+        try {
+
+            const response = await fetch(
+                "https://birthday-backend-xxxx.onrender.com/api/message",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name: name,
+                        message: message
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert("Đã gửi lời nhắn thành công! 💖");
+            } else {
+                alert("Gửi thất bại!");
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Không kết nối được với server!");
+
+        }
+    }
+
+
 
 
 
