@@ -5,67 +5,108 @@ const path = require("path");
 
 const app = express();
 
-// Cho phép frontend gửi dữ liệu đến backend
 app.use(cors());
 app.use(express.json());
 
-// Đường dẫn file lưu dữ liệu
 const filePath = path.join(__dirname, "messages.json");
 
-// Kiểm tra server
+// ================= KIỂM TRA SERVER =================
+
 app.get("/", (req, res) => {
     res.send("Backend đang chạy!");
 });
+
+// ================= XEM DỮ LIỆU =================
+
 app.get("/api/messages", (req, res) => {
+    try {
+        if (!fs.existsSync(filePath)) {
+            return res.json([]);
+        }
 
-    let messages = [];
-
-    if (fs.existsSync(filePath)) {
         const data = fs.readFileSync(filePath, "utf8");
 
-        if (data.trim() !== "") {
-            messages = JSON.parse(data);
+        if (data.trim() === "") {
+            return res.json([]);
         }
-    }
 
-    res.json(messages);
+        const messages = JSON.parse(data);
+
+        res.json(messages);
+
+    } catch (error) {
+        console.error("LỖI ĐỌC FILE:", error);
+
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
 });
-// Nhận thông tin khi bấm "Đi luôn"
+
+// ================= NHẬN NÚT ĐI LUÔN =================
+
 app.post("/api/message", (req, res) => {
 
-    let messages = [];
+    console.log("================================");
+    console.log("CÓ REQUEST TỪ WEBSITE!");
+    console.log("Dữ liệu nhận được:", req.body);
+    console.log("================================");
 
-    // Đọc dữ liệu cũ
-    if (fs.existsSync(filePath)) {
+    try {
 
-        const data = fs.readFileSync(filePath, "utf8");
+        let messages = [];
 
-        if (data.trim() !== "") {
-            messages = JSON.parse(data);
+        // Nếu file chưa tồn tại
+        if (fs.existsSync(filePath)) {
+
+            const data = fs.readFileSync(filePath, "utf8");
+
+            if (data.trim() !== "") {
+                messages = JSON.parse(data);
+            }
         }
+
+        // Thêm lượt bấm
+        const newMessage = {
+            action: "Đi luôn",
+            time: new Date().toLocaleString("vi-VN", {
+                timeZone: "Asia/Ho_Chi_Minh"
+            })
+        };
+
+        messages.push(newMessage);
+
+        // Ghi file
+        fs.writeFileSync(
+            filePath,
+            JSON.stringify(messages, null, 2),
+            "utf8"
+        );
+
+        console.log("ĐÃ LƯU THÀNH CÔNG:");
+        console.log(newMessage);
+
+        res.status(200).json({
+            success: true,
+            message: "Đã lưu thời gian!",
+            data: newMessage
+        });
+
+    } catch (error) {
+
+        console.error("LỖI KHI LƯU:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Không thể lưu dữ liệu!",
+            error: error.message
+        });
     }
-
-    // Thêm lần nhấn mới
-    messages.push({
-        action: "Đi luôn",
-        time: new Date().toLocaleString("vi-VN", {
-            timeZone: "Asia/Ho_Chi_Minh"
-        })
-    });
-
-    // Lưu vào messages.json
-    fs.writeFileSync(
-        filePath,
-        JSON.stringify(messages, null, 2)
-    );
-
-    res.json({
-        success: true,
-        message: "Đã lưu thời gian!"
-    });
 });
 
-// Render cung cấp PORT
+// ================= CHẠY SERVER =================
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
