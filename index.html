@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hii Chiiiiiiii!!</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background-image: radial-gradient(circle, #FFD700, #feb47b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            position: relative;
+        }
+
+        /* ================= CARD CHUNG ================= */
+
+        .card {
+            width: 410px;
+            height: 410px;
+            background: rgba(255, 180, 195, 0.45);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            text-align: center;
+
+            box-shadow:
+                0 20px 40px rgba(180, 70, 120, 0.25),
+                inset 0 0 20px rgba(255, 255, 255, 0.15);
+
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ================= ẢNH ================= */
+
+        .avatar {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* ================= TIÊU ĐỀ ================= */
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #d62970;
+            margin-bottom: 22px;
+        }
+
+        .message {
+            font-size: 17px;
+            color: #f06a9f;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* ================= NÚT CHUNG ================= */
+
+        .btn {
+            width: 180px;
+            height: 60px;
+            border: none;
+            border-radius: 35px;
+            background: #ed70b0;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+
+            box-shadow: 0 8px 20px rgba(210, 70, 140, 0.25);
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.08);
+            background: #e85ca4;
+        }
+
+        /* ================= EMOJI TRANG TRÍ ================= */
+
+        .decor {
+            position: absolute;
+            font-size: 65px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.12));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-12px) rotate(5deg);
+            }
+        }
+
+        /* ================= ẨN / HIỆN TRANG ================= */
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* ================= TRANG 2 ================= */
+
+        .invite-card {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .invite-card .title {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .invite-card .message {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .invite-info {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 15px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #d62970;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .invite-info p {
+            margin: 3px 0;
+        }
+
+        /* ================= TRANG 3 ================= */
+
+        .choice-card {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .choice-card .avatar {
+            width: 150px;
+            height: 120px;
+            margin-bottom: 15px;
+        }
+
+        .choice-card .title {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .choice-card .message {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Khu vực chứa hai nút */
+        .choice-buttons {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .btn-yes {
+            background: #ed70b0;
+            z-index: 2;
+        }
+
+.btn-no {
+    position: fixed;
+    left: 50%;
+    top: 75%;
+    width: 100px;
+    height: 45px;
+    background: #f6a6c5;
+    color: #d62970;
+    font-size: 15px;
+    z-index: 9999;
+
+    transition:
+        left 0.3s ease,
+        top 0.3s ease;
+}
+
+.btn-no:hover {
+    background: #f6a6c5;
+}
+
+
+        /* ================= ĐIỆN THOẠI ================= */
+
+        @media (max-width: 500px) {
+            .card {
+                width: 90%;
+                height: 410px;
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 27px;
+            }
+
+            .message {
+                font-size: 15px;
+            }
+
+            .decor {
+                font-size: 45px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= EMOJI ================= -->
+
+    <div class="decor">🌸</div>
+    <div class="decor">🦋</div>
+    <div class="decor">🐱</div>
+    <div class="decor">⭐</div>
+    <div class="decor">🌻</div>
+    <div class="decor">🎀</div>
+
+    <!-- ================= TRANG 1 ================= -->
+
+    <div class="card" id="page1">
+
+        <img class="avatar" src="tmu.png" alt="Ảnh mèo">
+
+        <h1 class="title">
+            Hii Chiiiiiiii!!
+        </h1>
+
+        <p class="message">
+            Đây là không gian bí mật anh code dành cho em.
+            Nhấn thử để bít ngay nè (●'◡'●)
+        </p>
+
+        <button class="btn" onclick="openForm1()">
+            Đâu coi!! ⭐
+        </button>
+
+    </div>
+
+    <!-- ================= TRANG 2 ================= -->
+
+    <div class="card invite-card page" id="page2">
+
+        <h1 class="title">
+            Có một lời mời dành cho em 💌
+        </h1>
+
+        <p class="message">
+            Sau những ngày học tập và làm việc mệt mỏi,
+            anh muốn rủ em cùng đi chơi một buổi.
+            Không cần gì cầu kỳ, chỉ cần em vui là được.
+        </p>
+
+        <div class="invite-info">
+            <p>📅 <b>Thời gian:</b> Một ngày đẹp trời</p>
+            <p>📍 <b>Địa điểm:</b> Chỗ nào em thích</p>
+            <p>🍰 <b>Nội dung:</b> Đi chơi, ăn uống và tám chuyện</p>
+        </div>
+
+        <button class="btn" onclick="openForm2()">
+            Xem tiếp 💖
+        </button>
+
+    </div>
+
+    <!-- ================= TRANG 3 ================= -->
+
+   
+<!-- ================= TRANG 3 ================= -->
+
+<div class="card choice-card page" id="page3">
+
+    <h1 class="title">
+        Chốt đơn nhé? 🥹
+    </h1>
+
+    <p class="message">
+        Vậy em có muốn đi cùng anh không?
+        Chọn một đáp án bên dưới nha.
+    </p>
+
+    <div class="choice-buttons">
+
+        <button class="btn btn-yes" id="yesBtn" onclick="sayYes()">
+            Đi luôn! 💖
+        </button>
+
+        <button
+            class="btn btn-no"
+            id="noBtn"
+            onmouseenter="moveNoButton()"
+            onclick="moveNoButton()">
+            Không thèm đi 😌
+        </button>
+
+    </div>
+
+</div>
+
+
+
+    <script>
+        /* ================= EMOJI RANDOM ================= */
+
+        const emojis = document.querySelectorAll(".decor");
+
+        emojis.forEach((emoji, index) => {
+            let x, y;
+
+            do {
+                x = Math.random() * (window.innerWidth - 100);
+                y = Math.random() * (window.innerHeight - 100);
+
+            } while (
+                x > window.innerWidth / 2 - 250 &&
+                x < window.innerWidth / 2 + 250 &&
+                y > window.innerHeight / 2 - 250 &&
+                y < window.innerHeight / 2 + 250
+            );
+
+            emoji.style.left = x + "px";
+            emoji.style.top = y + "px";
+            emoji.style.fontSize = (55 + Math.random() * 35) + "px";
+            emoji.style.animationDelay = (index * 0.3) + "s";
+        });
+
+
+        /* ================= CHUYỂN TRANG 1 → 2 ================= */
+
+        function openForm1() {
+            document.getElementById("page1").style.display = "none";
+            document.getElementById("page2").style.display = "flex";
+        }
+
+
+        /* ================= CHUYỂN TRANG 2 → 3 ================= */
+
+        function openForm2() {
+            document.getElementById("page2").style.display = "none";
+            document.getElementById("page3").style.display = "flex";
+        }
+
+
+        /* ================= NÚT ĐI LUÔN ================= */
+
+        let yesSize = 180;
+
+        function sayYes() 
+        { alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖"); }
+
+
+        /* ================= NÚT KHÔNG ĐI ================= */
+
+        
+       
+        function moveNoButton() {
+            const btn = document.getElementById("noBtn");
+
+            // Vị trí hiện tại của nút
+            const currentX = btn.offsetLeft;
+            const currentY = btn.offsetTop;
+
+            // Chỉ nhảy trong phạm vi khoảng 120px quanh vị trí hiện tại
+            const moveDistance = 120;
+
+            let randomX = currentX + (Math.random() * moveDistance * 3 - moveDistance);
+            let randomY = currentY + (Math.random() * moveDistance * 3 - moveDistance);
+
+            // Giới hạn để nút không bay ra khỏi màn hình
+            const maxX = window.innerWidth - btn.offsetWidth;
+            const maxY = window.innerHeight - btn.offsetHeight;
+
+            randomX = Math.max(0, Math.min(randomX, maxX));
+            randomY = Math.max(0, Math.min(randomY, maxY));
+
+            btn.style.left = randomX + "px";
+            btn.style.top = randomY + "px";
+        }
+
+
+
+
+    </script>
+
+</body>
+</html>
+
