@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -9,128 +8,77 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// File messages.json nằm cùng thư mục với server.js
 const filePath = path.join(__dirname, "messages.json");
 
+// Khởi tạo file nếu chưa có để tránh lỗi đọc file
+if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, "[]", "utf8");
+}
 
-// ================= KIỂM TRA SERVER =================
-
+// 1. Kiểm tra trạng thái server
 app.get("/", (req, res) => {
-    res.send("Backend đang chạy!");
+    res.send("Backend đang hoạt động bình thường!");
 });
 
-
-// ================= XEM ĐƯỜNG DẪN FILE =================
-
-app.get("/test-file", (req, res) => {
-    res.json({
-        filePath: filePath,
-        exists: fs.existsSync(filePath)
-    });
-});
-
-
-// ================= XEM DỮ LIỆU =================
-
+// 2. API ĐỌC FILE - Dùng link này trên trình duyệt để xem nội dung messages.json
 app.get("/api/messages", (req, res) => {
     try {
-
         if (!fs.existsSync(filePath)) {
             return res.json([]);
         }
-
         const data = fs.readFileSync(filePath, "utf8");
-
-        if (data.trim() === "") {
-            return res.json([]);
-        }
-
-        const messages = JSON.parse(data);
-
+        const messages = data.trim() ? JSON.parse(data) : [];
         res.json(messages);
-
     } catch (error) {
-
-        console.error("LỖI ĐỌC FILE:", error);
-
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
+        res.status(500).json({ error: error.message });
     }
 });
 
-
-// ================= NHẬN NÚT ĐI LUÔN =================
-
+// 3. API GHI FILE khi bấm nút
 app.post("/api/message", (req, res) => {
-
-    console.log("================================");
-    console.log("CÓ REQUEST TỪ WEBSITE!");
-    console.log("DỮ LIỆU:", req.body);
-    console.log("FILE:", filePath);
-    console.log("================================");
+    console.log(">>> Có yêu cầu ghi file:", req.body);
 
     try {
-
         let messages = [];
 
-        // Nếu messages.json đã tồn tại
         if (fs.existsSync(filePath)) {
-
             const data = fs.readFileSync(filePath, "utf8");
-
-            if (data.trim() !== "") {
+            if (data.trim()) {
                 messages = JSON.parse(data);
             }
         }
 
-        // Tạo dữ liệu mới
         const newMessage = {
+            id: Date.now(),
             action: req.body.action || "Đi luôn",
             time: new Date().toLocaleString("vi-VN", {
                 timeZone: "Asia/Ho_Chi_Minh"
             })
         };
 
-        // Thêm vào danh sách
         messages.push(newMessage);
 
-        // Ghi vào messages.json
-        fs.writeFileSync(
-            filePath,
-            JSON.stringify(messages, null, 2),
-            "utf8"
-        );
+        // Ghi đè lại file trên Render
+        fs.writeFileSync(filePath, JSON.stringify(messages, null, 2), "utf8");
 
-        console.log("ĐÃ GHI FILE THÀNH CÔNG!");
-        console.log(newMessage);
+        console.log(">>> Đã ghi file thành công:", newMessage);
 
         res.status(200).json({
             success: true,
-            message: "Đã lưu thành công!",
+            message: "Đã lưu vào messages.json thành công!",
             data: newMessage
         });
-
     } catch (error) {
-
-        console.error("LỖI KHI GHI FILE:", error);
-
+        console.error(">>> Lỗi khi ghi file:", error);
         res.status(500).json({
             success: false,
-            message: "Không thể ghi messages.json",
+            message: "Lỗi ghi file",
             error: error.message
         });
     }
 });
 
-
-// ================= CHẠY SERVER =================
-
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
-    console.log(`Server đang chạy tại port ${PORT}`);
-    console.log(`File messages.json: ${filePath}`);
+    console.log(`Server chạy tại port ${PORT}`);
 });
-
