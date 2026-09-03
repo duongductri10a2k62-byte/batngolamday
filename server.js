@@ -16,7 +16,20 @@ const filePath = path.join(__dirname, "messages.json");
 app.get("/", (req, res) => {
     res.send("Backend đang chạy!");
 });
+app.get("/api/messages", (req, res) => {
 
+    let messages = [];
+
+    if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath, "utf8");
+
+        if (data.trim() !== "") {
+            messages = JSON.parse(data);
+        }
+    }
+
+    res.json(messages);
+});
 // Nhận thông tin khi bấm "Đi luôn"
 app.post("/api/message", (req, res) => {
 
