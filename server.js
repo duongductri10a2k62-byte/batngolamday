@@ -1,4 +1,4 @@
-```js
+
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -133,4 +133,4 @@ app.listen(PORT, () => {
     console.log(`Server đang chạy tại port ${PORT}`);
     console.log(`File messages.json: ${filePath}`);
 });
-```
+
