@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -10,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Đường dẫn file lưu tin nhắn
+// Đường dẫn file lưu dữ liệu
 const filePath = path.join(__dirname, "messages.json");
 
 // Kiểm tra server
@@ -18,21 +17,14 @@ app.get("/", (req, res) => {
     res.send("Backend đang chạy!");
 });
 
-// Nhận tin nhắn từ frontend
+// Nhận thông tin khi bấm "Đi luôn"
 app.post("/api/message", (req, res) => {
-    const { name, message } = req.body;
-
-    if (!name || !message) {
-        return res.status(400).json({
-            success: false,
-            message: "Vui lòng nhập đủ thông tin!"
-        });
-    }
 
     let messages = [];
 
     // Đọc dữ liệu cũ
     if (fs.existsSync(filePath)) {
+
         const data = fs.readFileSync(filePath, "utf8");
 
         if (data.trim() !== "") {
@@ -40,11 +32,12 @@ app.post("/api/message", (req, res) => {
         }
     }
 
-    // Thêm tin nhắn mới
+    // Thêm lần nhấn mới
     messages.push({
-        name: name,
-        message: message,
-        time: new Date().toISOString()
+        action: "Đi luôn",
+        time: new Date().toLocaleString("vi-VN", {
+            timeZone: "Asia/Ho_Chi_Minh"
+        })
     });
 
     // Lưu vào messages.json
@@ -55,14 +48,13 @@ app.post("/api/message", (req, res) => {
 
     res.json({
         success: true,
-        message: "Đã nhận tin nhắn!"
+        message: "Đã lưu thời gian!"
     });
 });
 
-// Render sẽ cung cấp PORT
+// Render cung cấp PORT
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server đang chạy tại port ${PORT}`);
 });
-
