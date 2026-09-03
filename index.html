@@ -343,122 +343,52 @@
 
 
 
-    <script>
-        /* ================= EMOJI RANDOM ================= */
+<script>
+    /* ================= EMOJI RANDOM ================= */
 
-        const emojis = document.querySelectorAll(".decor");
+    const emojis = document.querySelectorAll(".decor");
 
-        emojis.forEach((emoji, index) => {
-            let x, y;
+    emojis.forEach((emoji, index) => {
+        let x, y;
 
-            do {
-                x = Math.random() * (window.innerWidth - 100);
-                y = Math.random() * (window.innerHeight - 100);
+        do {
+            x = Math.random() * (window.innerWidth - 100);
+            y = Math.random() * (window.innerHeight - 100);
+        } while (
+            x > window.innerWidth / 2 - 250 &&
+            x < window.innerWidth / 2 + 250 &&
+            y > window.innerHeight / 2 - 250 &&
+            y < window.innerHeight / 2 + 250
+        );
 
-            } while (
-                x > window.innerWidth / 2 - 250 &&
-                x < window.innerWidth / 2 + 250 &&
-                y > window.innerHeight / 2 - 250 &&
-                y < window.innerHeight / 2 + 250
-            );
-
-            emoji.style.left = x + "px";
-            emoji.style.top = y + "px";
-            emoji.style.fontSize = (55 + Math.random() * 35) + "px";
-            emoji.style.animationDelay = (index * 0.3) + "s";
-        });
-
-
-        /* ================= CHUYỂN TRANG 1 → 2 ================= */
-
-        function openForm1() {
-            document.getElementById("page1").style.display = "none";
-            document.getElementById("page2").style.display = "flex";
-        }
+        emoji.style.left = x + "px";
+        emoji.style.top = y + "px";
+        emoji.style.fontSize = (55 + Math.random() * 35) + "px";
+        emoji.style.animationDelay = (index * 0.3) + "s";
+    });
 
 
-        /* ================= CHUYỂN TRANG 2 → 3 ================= */
+    /* ================= TRANG 1 → 2 ================= */
 
-        function openForm2() {
-            document.getElementById("page2").style.display = "none";
-            document.getElementById("page3").style.display = "flex";
-        }
-
-
-        /* ================= NÚT ĐI LUÔN ================= */
-
-        let yesSize = 180;
-
-        function sayYes() 
-        { alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖"); }
-
-
-        /* ================= NÚT KHÔNG ĐI ================= */
-
-        
-       
-        function moveNoButton() {
-            const btn = document.getElementById("noBtn");
-
-            // Vị trí hiện tại của nút
-            const currentX = btn.offsetLeft;
-            const currentY = btn.offsetTop;
-
-            // Chỉ nhảy trong phạm vi khoảng 120px quanh vị trí hiện tại
-            const moveDistance = 120;
-
-            let randomX = currentX + (Math.random() * moveDistance * 3 - moveDistance);
-            let randomY = currentY + (Math.random() * moveDistance * 3 - moveDistance);
-
-            // Giới hạn để nút không bay ra khỏi màn hình
-            const maxX = window.innerWidth - btn.offsetWidth;
-            const maxY = window.innerHeight - btn.offsetHeight;
-
-            randomX = Math.max(0, Math.min(randomX, maxX));
-            randomY = Math.max(0, Math.min(randomY, maxY));
-
-            btn.style.left = randomX + "px";
-            btn.style.top = randomY + "px";
-        }
-
-        
-
-    // Các hàm chuyển page của bạn
     function openForm1() {
         document.getElementById("page1").style.display = "none";
         document.getElementById("page2").style.display = "flex";
     }
+
+
+    /* ================= TRANG 2 → 3 ================= */
 
     function openForm2() {
         document.getElementById("page2").style.display = "none";
         document.getElementById("page3").style.display = "flex";
     }
 
-    // Nút Đi luôn
-    function sayYes() {
-        alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖");
-    }
 
-    // Nút Không thèm đi
-    function moveNoButton() {
-        const btn = document.getElementById("noBtn");
+    /* ================= NÚT ĐI LUÔN ================= */
 
-        const maxX = window.innerWidth - btn.offsetWidth;
-        const maxY = window.innerHeight - btn.offsetHeight;
+    async function sayYes() {
 
-        const randomX = Math.random() * maxX;
-        const randomY = Math.random() * maxY;
-
-        btn.style.left = randomX + "px";
-        btn.style.top = randomY + "px";
-    }
-
-    // ================= KẾT NỐI BACKEND =================
-
-    async function sendMessage() {
-
-        const name = document.getElementById("name").value;
-        const message = document.getElementById("message").value;
+        console.log("Đã nhấn nút Đi luôn!");
 
         try {
 
@@ -472,34 +402,53 @@
                     },
 
                     body: JSON.stringify({
-                        name: name,
-                        message: message
+                        name: "Chiii",
+                        message: "ĐI LUÔN! 💖"
                     })
                 }
             );
 
             const data = await response.json();
 
-            if (data.success) {
-                alert("Đã gửi lời nhắn thành công! 💖");
+            console.log("Server trả về:", data);
+
+            if (response.ok && data.success) {
+
+                alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖");
+
             } else {
-                alert("Gửi thất bại!");
+
+                alert("Đã nhấn nhưng server không lưu được!");
+
             }
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Lỗi kết nối:", error);
 
-            alert("Không kết nối được với server!");
+            alert("Đã nhấn nhưng không kết nối được với server!");
 
         }
     }
 
 
+    /* ================= NÚT KHÔNG ĐI ================= */
 
+    function moveNoButton() {
 
+        const btn = document.getElementById("noBtn");
 
-    </script>
+        const maxX = window.innerWidth - btn.offsetWidth;
+        const maxY = window.innerHeight - btn.offsetHeight;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        btn.style.left = randomX + "px";
+        btn.style.top = randomY + "px";
+    }
+
+</script>
 
 </body>
 </html>
