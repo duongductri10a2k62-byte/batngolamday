@@ -386,50 +386,37 @@
 
     /* ================= NÚT ĐI LUÔN ================= */
 
-    async function sayYes() {
+   async function sayYes() {
 
-        console.log("Đã nhấn nút Đi luôn!");
+    const time = new Date().toISOString();
 
-        try {
+    try {
 
-            const response = await fetch(
-                "https://batngolamday.onrender.com/api/message",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        name: "Chiii",
-                        message: "ĐI LUÔN! 💖"
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            console.log("Server trả về:", data);
-
-            if (response.ok && data.success) {
-
-                alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖");
-
-            } else {
-
-                alert("Đã nhấn nhưng server không lưu được!");
-
+        const response = await fetch(
+            "https://batngolamday.onrender.com/api/message",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    action: "Đi luôn",
+                    time: time
+                })
             }
+        );
 
-        } catch (error) {
+        const data = await response.json();
 
-            console.error("Lỗi kết nối:", error);
-
-            alert("Đã nhấn nhưng không kết nối được với server!");
-
+        if (response.ok) {
+            alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖");
         }
+
+    } catch (error) {
+        console.error(error);
+        alert("Không kết nối được với server!");
     }
+}
 
 
     /* ================= NÚT KHÔNG ĐI ================= */
