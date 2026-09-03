@@ -388,7 +388,7 @@
 
    async function sayYes() {
 
-    const time = new Date().toISOString();
+    console.log("ĐÃ BẤM NÚT ĐI LUÔN!");
 
     try {
 
@@ -400,21 +400,33 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    action: "Đi luôn",
-                    time: time
+                    action: "Đi luôn"
                 })
             }
         );
 
+        console.log("HTTP STATUS:", response.status);
+
         const data = await response.json();
 
-        if (response.ok) {
+        console.log("BACKEND TRẢ VỀ:", data);
+
+        if (response.ok && data.success) {
+
             alert("Yayyyyy! Chốt kèo rồi nha! 🎉💖");
+
+        } else {
+
+            alert("Server nhận được nhưng lưu bị lỗi!");
+
         }
 
     } catch (error) {
-        console.error(error);
+
+        console.error("LỖI FETCH:", error);
+
         alert("Không kết nối được với server!");
+
     }
 }
 
